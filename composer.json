@@ -57,10 +57,6 @@
             "only": [
                 "hyperf/*"
             ]
-        },
-        "bsmq": {
-            "type": "path",
-            "url":  "/Users/neil/learn/hyperf/neilqin/bsmq"
         }
     }
 }
