@@ -79,7 +79,7 @@ class BeanstalkdDriver extends Driver
     {
         $message = make(JobMessage::class, [$job]);
         $data = $this->packer->pack($message);
-        return (bool) $this->bsmq->putInTube($this->channel->getChannel(), $data, $this->priority, $delay, $this->timeout);
+        return (bool) $this->bsmq->putInTube($this->channel->getChannel(), $data, $this->priority, $delay, $this->handleTimeout);
     }
 
     public function delete(JobInterface $job): bool
@@ -131,7 +131,7 @@ class BeanstalkdDriver extends Driver
 
         $num = 0;
         while ($data = $this->redis->rpop($channel)) {
-            $this->bsmq->putInTube($this->channel->getChannel(), $data, $this->priority, 0, $this->timeout);
+            $this->bsmq->putInTube($this->channel->getChannel(), $data, $this->priority, 0, $this->handleTimeout);
             ++$num;
         }
         return $num;
@@ -163,7 +163,7 @@ class BeanstalkdDriver extends Driver
     {
         $data = $this->packer->pack($message);
         $delay = $this->getRetrySeconds($message->getAttempts());
-        $id = $this->bsmq->putInTube($this->channel->getChannel(), $data, $this->priority, $delay, $this->timeout);
+        $id = $this->bsmq->putInTube($this->channel->getChannel(), $data, $this->priority, $delay, $this->handleTimeout);
         return (bool) $id;
     }
 
